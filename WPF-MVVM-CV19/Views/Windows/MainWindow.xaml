@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:cmd="clr-namespace:WPF_MVVM_CV19.Infrastructure.Commands"
         xmlns:vm="clr-namespace:WPF_MVVM_CV19.ViewModels"
         xmlns:l="clr-namespace:WPF_MVVM_CV19"
         mc:Ignorable="d"
@@ -13,11 +14,16 @@
     </Window.DataContext>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
-            <MenuItem Header="Файл">
-                <MenuItem Header="Выход" Command="{Binding CloseApplicationCommand}"></MenuItem>                
+            <MenuItem Header="File">
+                <!--<MenuItem Header="Exit" Command="{Binding CloseApplicationCommand}"></MenuItem>-->                
+                <MenuItem Header="Exit">
+                    <MenuItem.Command>
+                        <cmd:CloseApplicationCommand/>
+                    </MenuItem.Command>
+                </MenuItem>                
             </MenuItem>
-            <MenuItem Header="Помощь">
-                <MenuItem Header="О программе"></MenuItem>
+            <MenuItem Header="Help">
+                <MenuItem Header="About..."></MenuItem>
             </MenuItem>
         </Menu>
         <StatusBar DockPanel.Dock="Bottom">
@@ -29,7 +35,7 @@
             </StatusBarItem>
         </StatusBar>
         <TabControl>
-            <TabItem Header="Вкладка 1">
+            <TabItem Header="Tab 1">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="13*"/>
@@ -51,7 +57,7 @@
 
                 </Grid>
             </TabItem>
-            <TabItem Header="Вкладка 2"></TabItem>
+            <TabItem Header="Tab 2"></TabItem>
         </TabControl>
     </DockPanel>
 </Window>
