@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.NetworkInformation;
 using System.Text;
+using System.Windows.Controls;
+using System.Xaml;
 using WPF_MVVM_CV19.ViewModels.Base;
 
 namespace WPF_MVVM_CV19.ViewModels
@@ -26,6 +29,17 @@ namespace WPF_MVVM_CV19.ViewModels
             //    Set(ref _Title, value);
             //}
             set => Set(ref _Title, value);
+        }
+
+        #endregion
+
+        #region Status : string статус программы
+
+        private string _Status = "Готов!";
+
+        public string Status { 
+            get => _Status; 
+            set => Set(ref _Status, value);
         }
 
         #endregion
