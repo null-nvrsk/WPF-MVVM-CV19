@@ -9,12 +9,29 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Xaml;
 using WPF_MVVM_CV19.Infrastructure.Commands;
+using WPF_MVVM_CV19.Models;
 using WPF_MVVM_CV19.ViewModels.Base;
 
 namespace WPF_MVVM_CV19.ViewModels
 {
     internal class MainWindowViewModel : ViewModel
     {
+        #region TestDataPoints : IEnumerable<DataPoint>
+
+        /// <summary>Тестовый набор данных для визуализации графиков </summary>
+        private IEnumerable<DataPoint> _testDataPoints;
+
+        /// <summary>Тестовый набор данных для визуализации графиков </summary>
+        public IEnumerable<DataPoint> TestDataPoints
+        {
+            get => _testDataPoints;
+            set => Set(ref _testDataPoints, value);
+        }
+
+
+        #endregion
+
+
         #region Window title
 
         private string _Title = "Анализ статистики CV19";
@@ -73,8 +90,18 @@ namespace WPF_MVVM_CV19.ViewModels
             CloseApplicationCommand =
                 new LambdaCommand(OnCloseApplicationCommandExecuted, CanCloseApplicationCommandExecute);
 
-
             #endregion
+
+            var data_points = new List<DataPoint>((int)(360 / 0.1));
+            for (var x = 0d; x <= 360; x += 0.1)
+            {
+                const double to_rad = Math.PI / 180;
+                var y = Math.Sin(x * to_rad);
+
+                data_points.Add(new DataPoint { XValue = x, YValue = y });
+            }
+
+            TestDataPoints = data_points;
         }
     }
 }
