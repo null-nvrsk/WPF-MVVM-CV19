@@ -7,6 +7,7 @@
         xmlns:vm="clr-namespace:WPF_MVVM_CV19.ViewModels"
         xmlns:l="clr-namespace:WPF_MVVM_CV19"
         xmlns:fa5="http://schemas.fontawesome.com/icons/"
+        xmlns:oxy="http://oxyplot.org/wpf"
         mc:Ignorable="d"
         Title="{Binding Title}" 
         Height="450" Width="800">
@@ -44,12 +45,25 @@
             </StatusBarItem>
         </StatusBar>
         <TabControl>
-            <TabItem>
+            <TabItem Header="График">
+                <oxy:Plot>
+                    <oxy:Plot.Axes>
+                        <oxy:LinearAxis Position="Left"/>
+                        <oxy:LinearAxis Position="Bottom"/>
+                    </oxy:Plot.Axes>
+                    <oxy:LineSeries Color="Red" 
+                                     ItemsSource="{Binding TestDataPoints}"
+                                     DataFieldX="XValue"
+                                     DataFieldY="YValue" />
+
+                </oxy:Plot>
+            </TabItem>
+            <TabItem Visibility="Collapsed">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <!--<Image Source=""></Image>-->
                         <fa5:SvgAwesome Icon="Regular_File" Height="16" Margin="0 0 5 0"
-                                          Foreground="DarkGreen" />
+                                        Foreground="DarkGreen" />
                         <TextBlock Text="Tab 1"/>
 
                     </StackPanel>
@@ -82,7 +96,6 @@
 
                 </Grid>
             </TabItem>
-            <TabItem Header="Tab 2"></TabItem>
         </TabControl>
     </DockPanel>
 </Window>
