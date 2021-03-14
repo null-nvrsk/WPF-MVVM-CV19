@@ -16,6 +16,18 @@ namespace WPF_MVVM_CV19.ViewModels
 {
     internal class MainWindowViewModel : ViewModel
     {
+        #region SelectedPageIndex : int - Номер выбранно вкладки
+
+        private int _SelectedPageIndex;
+
+        public int SelectedPageIndex
+        {
+            get => _SelectedPageIndex;
+            set => Set(ref _SelectedPageIndex, value);
+        }
+
+        #endregion
+
         #region TestDataPoints : IEnumerable<DataPoint>
 
         /// <summary>Тестовый набор данных для визуализации графиков </summary>
@@ -80,6 +92,18 @@ namespace WPF_MVVM_CV19.ViewModels
 
         #endregion
 
+        #region ChangeTabIndexCommand
+        public ICommand ChangeTabIndexCommand { get; }
+
+        private bool CanChangeTabIndexCommandExecute(object p) => _SelectedPageIndex >= 0;
+
+        private void OnChangeTabIndexCommandExecuted(object p)
+        {
+            if (p is null) return;
+            SelectedPageIndex += Convert.ToInt32(p);
+        }
+
+        #endregion
 
         #endregion
 
@@ -89,6 +113,8 @@ namespace WPF_MVVM_CV19.ViewModels
 
             CloseApplicationCommand =
                 new LambdaCommand(OnCloseApplicationCommandExecuted, CanCloseApplicationCommandExecute);
+
+            ChangeTabIndexCommand = new LambdaCommand(OnChangeTabIndexCommandExecuted, CanChangeTabIndexCommandExecute);
 
             #endregion
 

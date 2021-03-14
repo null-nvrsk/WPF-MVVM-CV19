@@ -35,6 +35,16 @@
             <MenuItem Header="Help">
                 <MenuItem Header="About..."></MenuItem>
             </MenuItem>
+            <MenuItem Command="{Binding ChangeTabIndexCommand}" CommandParameter="-1">
+                <MenuItem.Header>
+                    <fa5:SvgAwesome Height="12" Icon="Regular_ArrowAltCircleLeft" />
+                </MenuItem.Header>
+            </MenuItem>
+            <MenuItem Command="{Binding ChangeTabIndexCommand}" CommandParameter="1">
+                <MenuItem.Header>
+                    <fa5:SvgAwesome Height="12" Icon="Regular_ArrowAltCircleRight" />
+                </MenuItem.Header>
+            </MenuItem>
         </Menu>
         <StatusBar DockPanel.Dock="Bottom">
             <StatusBarItem MinWidth="100" MaxWidth="300">
@@ -43,8 +53,9 @@
             <StatusBarItem>
                 <ProgressBar Width="120" Height="14" Value="30" />
             </StatusBarItem>
+            <StatusBarItem Content="{Binding SelectedPageIndex}"/>
         </StatusBar>
-        <TabControl>
+        <TabControl SelectedIndex="{Binding SelectedPageIndex}">
             <TabItem Header="График">
                 <oxy:Plot>
                     <oxy:Plot.Axes>
@@ -58,13 +69,13 @@
 
                 </oxy:Plot>
             </TabItem>
-            <TabItem Visibility="Collapsed">
+            <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <!--<Image Source=""></Image>-->
                         <fa5:SvgAwesome Icon="Regular_File" Height="16" Margin="0 0 5 0"
                                         Foreground="DarkGreen" />
-                        <TextBlock Text="Tab 1"/>
+                        <TextBlock Text="Tab 2"/>
 
                     </StackPanel>
                 </TabItem.Header>
@@ -96,6 +107,9 @@
 
                 </Grid>
             </TabItem>
+            <TabItem Header="Tab 3"></TabItem>
+            <TabItem Header="Tab 4"></TabItem>
+            <TabItem Header="Tab 5"></TabItem>
         </TabControl>
     </DockPanel>
 </Window>
