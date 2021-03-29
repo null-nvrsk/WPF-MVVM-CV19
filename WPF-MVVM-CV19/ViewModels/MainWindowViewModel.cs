@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Linq;
 using System.Net.Mime;
 using System.Net.NetworkInformation;
 using System.Text;
@@ -10,12 +12,17 @@ using System.Windows.Input;
 using System.Xaml;
 using WPF_MVVM_CV19.Infrastructure.Commands;
 using WPF_MVVM_CV19.Models;
+using WPF_MVVM_CV19.Models.Decanat;
 using WPF_MVVM_CV19.ViewModels.Base;
 
 namespace WPF_MVVM_CV19.ViewModels
 {
     internal class MainWindowViewModel : ViewModel
     {
+        //---------------------------------------------------------------------------------
+
+        public ObservableCollection<Group> Groups { get; }
+
         #region SelectedPageIndex : int - Номер выбранно вкладки
 
         private int _SelectedPageIndex;
@@ -78,6 +85,8 @@ namespace WPF_MVVM_CV19.ViewModels
 
         #endregion
 
+        //---------------------------------------------------------------------------------
+
         #region Commands
 
         #region CloseApplicationCommand
@@ -107,6 +116,8 @@ namespace WPF_MVVM_CV19.ViewModels
 
         #endregion
 
+        //---------------------------------------------------------------------------------
+
         public MainWindowViewModel()
         {
             #region Commands
@@ -128,6 +139,27 @@ namespace WPF_MVVM_CV19.ViewModels
             }
 
             TestDataPoints = data_points;
+
+            int studentIndex = 1;
+            var students = Enumerable.Range(1, 30).Select(i => new Student
+            {
+                Name = $"Имя {studentIndex}", 
+                Surname = $"Фамилия {studentIndex}", 
+                Patronymic = $"Отчество {studentIndex++}",
+                Birthday = DateTime.Now,
+                Rating = 0
+            });
+
+            var groups = Enumerable.Range(1, 20).Select(i => new Group
+            {
+                Name = $"Группа {i}",
+                Students = new ObservableCollection<Student>(students)
+            });
+            Groups = new ObservableCollection<Group>(groups);
+
+
         }
+
+        //---------------------------------------------------------------------------------
     }
 }
