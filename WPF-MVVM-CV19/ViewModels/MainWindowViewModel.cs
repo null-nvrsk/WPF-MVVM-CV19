@@ -23,6 +23,18 @@ namespace WPF_MVVM_CV19.ViewModels
 
         public ObservableCollection<Group> Groups { get; }
 
+        #region SelectedGroup : Group - Выбранная группа студентов
+
+        private Group _selectedGroup;
+
+        public Group SelectedGroup
+        {
+            get => _selectedGroup;
+            set => Set(ref _selectedGroup, value);
+        }
+
+        #endregion
+
         #region SelectedPageIndex : int - Номер выбранно вкладки
 
         private int _SelectedPageIndex;
