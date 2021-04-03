@@ -65,10 +65,17 @@
                     </Grid.ColumnDefinitions>
 
                     <GroupBox Grid.Column="0" Header="Группы">
-                        <ListBox ItemsSource="{Binding Groups}"
-                                 DisplayMemberPath="Name"
-                                 SelectedItem="{Binding SelectedGroup}"
-                                 SelectedIndex="0"/>
+                        <DockPanel>
+                            <UniformGrid DockPanel.Dock="Bottom" Rows="1" Margin="0, 3">
+                                <Button Content="Добавить" Margin="0,0, 2,0" Command="{Binding CreateNewGroupCommand}"/>
+                                <Button Content="Удалить" Margin="2,0, 0, 0" Command="{Binding DeleteGroupCommand}" CommandParameter="{Binding SelectedGroup}"/>
+                            </UniformGrid>
+
+                            <ListBox ItemsSource="{Binding Groups}"
+                                     DisplayMemberPath="Name"
+                                     SelectedItem="{Binding SelectedGroup}"
+                                     SelectedIndex="0"/>
+                        </DockPanel>
                     </GroupBox>
 
                     <GroupBox Grid.Column="1"
