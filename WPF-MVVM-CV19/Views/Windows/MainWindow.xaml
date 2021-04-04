@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:cmd="clr-namespace:WPF_MVVM_CV19.Infrastructure.Commands"
+        xmlns:decanat="clr-namespace:WPF_MVVM_CV19.Models.Decanat"
         xmlns:vm="clr-namespace:WPF_MVVM_CV19.ViewModels"
         xmlns:l="clr-namespace:WPF_MVVM_CV19"
         xmlns:fa5="http://schemas.fontawesome.com/icons/"
@@ -56,6 +57,81 @@
             <StatusBarItem Content="{Binding SelectedPageIndex}"/>
         </StatusBar>
         <TabControl SelectedIndex="{Binding SelectedPageIndex}">
+            <TabItem Header="Студенты">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="250"></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+
+                    <GroupBox Grid.Column="0" Header="Группы">
+                        <DockPanel>
+                            <UniformGrid DockPanel.Dock="Bottom" Rows="1" Margin="0, 3">
+                                <Button Style="{StaticResource PrimaryBtn}" Command="{Binding CreateNewGroupCommand}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <fa5:ImageAwesome Height="12" Icon="Solid_Check" Foreground="LawnGreen" Margin="0,0,5,0">
+                                            <fa5:ImageAwesome.Effect>
+                                                <DropShadowEffect ShadowDepth="1"/>
+                                            </fa5:ImageAwesome.Effect>
+                                        </fa5:ImageAwesome>
+
+                                        <TextBlock Text="Добавить"/>
+                                    </StackPanel>
+
+                                </Button>
+                                <Button Content="Удалить" Style="{StaticResource DangerBtn}" Command="{Binding DeleteGroupCommand}" CommandParameter="{Binding SelectedGroup}"/>
+                            </UniformGrid>
+
+                            <ListBox ItemsSource="{Binding Groups}"
+                                     DisplayMemberPath="Name"
+                                     SelectedItem="{Binding SelectedGroup}"
+                                     SelectedIndex="0"/>
+                        </DockPanel>
+                    </GroupBox>
+
+                    <GroupBox Grid.Column="1"
+                              Header="{Binding SelectedGroup.Name, FallbackValue='Студенты', TargetNullValue='Группа не выбрана'}">
+                        <DataGrid ItemsSource="{Binding SelectedGroup.Students}" 
+                                  AutoGenerateColumns="False"
+                                  CanUserAddRows="False"
+                                  GridLinesVisibility="Vertical"
+                                  VerticalGridLinesBrush="DarkGray"
+                                  AlternatingRowBackground="WhiteSmoke">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Фамилия" Binding="{Binding Surname}" IsReadOnly="True" />
+                                <DataGridTextColumn Header="Имя" Binding="{Binding Name}" IsReadOnly="True" />
+                                <DataGridTextColumn Header="Отчество" Binding="{Binding Patronymic}" IsReadOnly="True" />
+                                <DataGridTextColumn Header="Рейтинг" Binding="{Binding Rating}" IsReadOnly="True" />
+                                <!--<DataGridTextColumn Header="Дата рождения" Binding="{Binding Birthday, StringFormat='dd.MM.yyyy'}" />-->
+                                <DataGridTemplateColumn Header="Дата рождения">
+                                    <!--<DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate DataType="decanat:Student">
+                                            <DatePicker SelectedDate="{Binding Birthday}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>-->
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate DataType="decanat:Student">
+                                            <TextBlock Text="{Binding Birthday, StringFormat='dd.MM.yyyy'}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                    <DataGridTemplateColumn.CellEditingTemplate>
+                                        <DataTemplate DataType="decanat:Student">
+                                            <DatePicker SelectedDate="{Binding Birthday}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellEditingTemplate>
+                                </DataGridTemplateColumn>
+                                
+                                <!--<DataGridTextColumn Header="Группа" Binding="{Binding DataContext.SelectedGroup.Name, RelativeSource={RelativeSource AncestorType=DataGrid} }"/>-->
+                                <DataGridTextColumn Header="Описание" Binding="{Binding Description}" Width="*" />
+                            </DataGrid.Columns>
+
+                        </DataGrid>
+                    </GroupBox>
+                </Grid>
+
+                
+
+            </TabItem>
             <TabItem Header="График">
                 <oxy:Plot>
                     <oxy:Plot.Axes>
@@ -69,44 +145,7 @@
 
                 </oxy:Plot>
             </TabItem>
-            <TabItem>
-                <TabItem.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <!--<Image Source=""></Image>-->
-                        <fa5:SvgAwesome Icon="Regular_File" Height="16" Margin="0 0 5 0"
-                                        Foreground="DarkGreen" />
-                        <TextBlock Text="Tab 2"/>
 
-                    </StackPanel>
-                </TabItem.Header>
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="13*"/>
-                        <RowDefinition Height="84*"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="271*"/>
-                        <ColumnDefinition Width="523*"/>
-                    </Grid.ColumnDefinitions>
-                    <Rectangle Grid.Column="0" Grid.Row="0" 
-                               Margin="5,7"
-                               Fill="Blue" Stroke="Red" 
-                               StrokeThickness="3" RadiusX="5" RadiusY="7"/>
-                    <Ellipse Grid.Column="1" Grid.Row="0" 
-                             Fill="Red" Stroke="Blue" StrokeThickness="3">
-                        <Ellipse.InputBindings>
-                            <MouseBinding 
-                                Command="{Binding CloseApplicationCommand}"
-                                MouseAction="LeftDoubleClick" />
-                        </Ellipse.InputBindings>
-                    </Ellipse>
-
-                    <GridSplitter Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" 
-                                  HorizontalAlignment="Right"
-                                  Width="4"/>
-
-                </Grid>
-            </TabItem>
             <TabItem Header="Tab 3"></TabItem>
             <TabItem Header="Tab 4"></TabItem>
             <TabItem Header="Tab 5"></TabItem>

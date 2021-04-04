@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Linq;
 using System.Net.Mime;
 using System.Net.NetworkInformation;
 using System.Text;
@@ -10,12 +12,29 @@ using System.Windows.Input;
 using System.Xaml;
 using WPF_MVVM_CV19.Infrastructure.Commands;
 using WPF_MVVM_CV19.Models;
+using WPF_MVVM_CV19.Models.Decanat;
 using WPF_MVVM_CV19.ViewModels.Base;
 
 namespace WPF_MVVM_CV19.ViewModels
 {
     internal class MainWindowViewModel : ViewModel
     {
+        //---------------------------------------------------------------------------------
+
+        public ObservableCollection<Group> Groups { get; }
+
+        #region SelectedGroup : Group - Выбранная группа студентов
+
+        private Group _selectedGroup;
+
+        public Group SelectedGroup
+        {
+            get => _selectedGroup;
+            set => Set(ref _selectedGroup, value);
+        }
+
+        #endregion
+
         #region SelectedPageIndex : int - Номер выбранно вкладки
 
         private int _SelectedPageIndex;
@@ -78,6 +97,8 @@ namespace WPF_MVVM_CV19.ViewModels
 
         #endregion
 
+        //---------------------------------------------------------------------------------
+
         #region Commands
 
         #region CloseApplicationCommand
@@ -105,7 +126,46 @@ namespace WPF_MVVM_CV19.ViewModels
 
         #endregion
 
+        #region CreateNewGroupCommand
+        public ICommand CreateNewGroupCommand { get; }
+
+        private bool CanCreateNewGroupCommandExecute(object p) => true;
+
+        private void OnCreateNewGroupCommandExecuted(object p)
+        {
+            var group_max_index = Groups.Count + 1;
+            var new_group = new Group
+            {
+                Name = $"Группа {group_max_index}",
+                Students = new ObservableCollection<Student>()
+            };
+
+            Groups.Add(new_group);
+        }
+
         #endregion
+
+        #region DeleteGroupCommand
+        public ICommand DeleteGroupCommand { get; }
+
+        private bool CanDeleteGroupCommandExecute(object p) => p is Group group && Groups.Contains(group);
+
+        private void OnDeleteGroupCommandExecuted(object p)
+        {
+            if (!(p is Group group)) return;
+
+            var group_index = Groups.IndexOf(group);
+            Groups.Remove(group);
+
+            if (group_index < Groups.Count)
+                SelectedGroup = Groups[group_index];
+        }
+
+        #endregion
+
+        #endregion
+
+        //---------------------------------------------------------------------------------
 
         public MainWindowViewModel()
         {
@@ -115,6 +175,8 @@ namespace WPF_MVVM_CV19.ViewModels
                 new LambdaCommand(OnCloseApplicationCommandExecuted, CanCloseApplicationCommandExecute);
 
             ChangeTabIndexCommand = new LambdaCommand(OnChangeTabIndexCommandExecuted, CanChangeTabIndexCommandExecute);
+            CreateNewGroupCommand = new LambdaCommand(OnCreateNewGroupCommandExecuted, CanCreateNewGroupCommandExecute);
+            DeleteGroupCommand = new LambdaCommand(OnDeleteGroupCommandExecuted, CanDeleteGroupCommandExecute);
 
             #endregion
 
@@ -128,6 +190,27 @@ namespace WPF_MVVM_CV19.ViewModels
             }
 
             TestDataPoints = data_points;
+
+            int studentIndex = 1;
+            var students = Enumerable.Range(1, 30).Select(i => new Student
+            {
+                Name = $"Имя {studentIndex}", 
+                Surname = $"Фамилия {studentIndex}", 
+                Patronymic = $"Отчество {studentIndex++}",
+                Birthday = DateTime.Now,
+                Rating = 0
+            });
+
+            var groups = Enumerable.Range(1, 20).Select(i => new Group
+            {
+                Name = $"Группа {i}",
+                Students = new ObservableCollection<Student>(students)
+            });
+            Groups = new ObservableCollection<Group>(groups);
+
+
         }
+
+        //---------------------------------------------------------------------------------
     }
 }
